@@ -7,8 +7,9 @@ SoftwareSerial FP_Serial(2, 3); // Serial Leitor Biometrico
 
 #include <SPI.h>
 #include <MFRC522.h>
-#define SS_PIN 10
-#define RST_PIN 9
+#define SS_PIN1 8
+#define SS_PIN2 9
+#define RST_PIN 10
 #include "RFIDSensor.h"
 
 int test_FP = 0;
@@ -37,7 +38,8 @@ void setup()
   initFingerPrint();
 
   // Inicia o leitor RFID
-  LeitorRFID.PCD_Init();
+  LeitorRFID[0].PCD_Init(SS_PIN1, RST_PIN);
+  LeitorRFID[1].PCD_Init(SS_PIN2, RST_PIN);
 
 }
 
@@ -73,7 +75,11 @@ void loop()
 
 uint8_t test_new_entity(){
   test_FP = finger.getImage();
-  while ( !BTSerial.available() && test_FP == FINGERPRINT_NOFINGER && ( !LeitorRFID.PICC_IsNewCardPresent() || !LeitorRFID.PICC_ReadCardSerial() ) ) return NADA_ENCONTRADO;
+  while ( !BTSerial.available() && 
+          test_FP == FINGERPRINT_NOFINGER && 
+          (( !LeitorRFID[0].PICC_IsNewCardPresent() || !LeitorRFID[0].PICC_ReadCardSerial() ) ||
+          ( !LeitorRFID[1].PICC_IsNewCardPresent() || !LeitorRFID[1].PICC_ReadCardSerial() )) )
+           return NADA_ENCONTRADO;
   if ( test_FP == FINGERPRINT_PACKETRECIEVEERR ) { BTSerial.println(F("Erro de comunicação com o FingerPrinter!")); return NADA_ENCONTRADO; }
   else if ( BTSerial.available() ){
     BTSerial.println(F("\nComandos:\n1 - Armazenar nova digital\n2 - Numero de templates armazenados\n3 - Deletar uma ID"));
