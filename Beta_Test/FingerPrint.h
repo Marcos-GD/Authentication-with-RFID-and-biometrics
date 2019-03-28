@@ -10,7 +10,7 @@
 // pin #3 conectado com o rx do sensor
 // comente essas duas linhas se utilizar o hardware serial
 #include <SoftwareSerial.h>
-SoftwareSerial FP_Serial(2, 3);
+
 
 #include <Adafruit_Fingerprint.h>
 Adafruit_Fingerprint finger = Adafruit_Fingerprint(&FP_Serial);

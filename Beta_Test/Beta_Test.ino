@@ -1,10 +1,14 @@
 //Mudar os pinos diretamente nas bibliotecas (temporario)
 #include <SoftwareSerial.h>
-SoftwareSerial BTSerial(4,5);
+SoftwareSerial BTSerial(4,5); // Serial Bluetooth
+SoftwareSerial FP_Serial(2, 3); // Serial Leitor Biometrico
+
 #include "FingerPrint.h"
 
 #include <SPI.h>
 #include <MFRC522.h>
+#define SS_PIN 10
+#define RST_PIN 9
 #include "RFIDSensor.h"
 
 int test_FP = 0;

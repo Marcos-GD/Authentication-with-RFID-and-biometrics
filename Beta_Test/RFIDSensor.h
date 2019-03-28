@@ -23,8 +23,6 @@
 #include <SPI.h>
 #include <MFRC522.h>
 
-#define SS_PIN 10
-#define RST_PIN 9
 
 String IDtag = ""; //Variável que armazenará o ID da Tag
 bool escape = false; // variável responsavel por sair do laço de espera pelo cartão
@@ -36,20 +34,7 @@ String TagsCadastradas[] = {
 
 MFRC522 LeitorRFID(SS_PIN, RST_PIN);    // Cria uma nova instância para o leitor e passa os pinos como parâmetro
 
-/*    Como deve ser utilizado em codigo (ARDUINO)
-void setup() {
-  Serial.begin(9600);             // Inicializa a comunicação Serial
-  SPI.begin();                    // Inicializa comunicacao SPI
-  LeitorRFID.PCD_Init();          // Inicializa o leitor RFID
-}
-
-void loop(){
-    LerRFID();
-    CompararRFID();
-}
-*/
-
-void compararRFID(){
+bool compararRFID(){
   IDtag = ""; //Inicialmente IDtag deve estar vazia.
   // Pega o ID da Tag através da função LeitorRFID.uid e Armazena o ID na variável IDtag
   for (byte i = 0; i < LeitorRFID.uid.size; i++) {
@@ -62,11 +47,12 @@ void compararRFID(){
     if (  IDtag.equalsIgnoreCase(TagsCadastradas[i])  ) {
       BTSerial.println("ID cadastrada");
       delay(2000);
-      return;
+      return true;
     }
   }
   //else
   BTSerial.println("ID desconhecida!");
   delay(2000); //aguarda 2 segundos para efetuar uma nova leitura
+  return false;
 }
 
