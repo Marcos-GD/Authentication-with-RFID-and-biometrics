@@ -1,0 +1,8 @@
+- Entre no projeto do circuit maker:
+	https://workspace.circuitmaker.com/Projects/Details/Marcos-Dantas-2/Portaria
+- Exporte o gerber das faces que possuem as trilhas de cobre;
+- Descompacte o zip do gerber;
+- Abra os arquivos da pasta descompactada no GerbView;
+- Exporte para DXF;
+- Utilize o DFX no programa da impressora para imprimir o circuito impresso.
+end.
