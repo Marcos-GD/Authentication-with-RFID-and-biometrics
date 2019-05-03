@@ -26,28 +26,24 @@
 
 String IDtag = ""; //Variável que armazenará o ID da Tag
 bool escape = false; // variável responsavel por sair do laço de espera pelo cartão
-int leitorEmUso = -1;
 
 String TagsCadastradas[] = {
   "B83F572",
   "7DBBB2E"  //Cartao Teste
 };
 
-MFRC522 LeitorRFID[2];   // Cria uma nova instância para o leitor e passa os pinos como parâmetro
+MFRC522 RFID_Relay;
+MFRC522 RFID_Porta;
 
-bool compararRFID(){
+bool compararRFID(MFRC522 RFID){
   IDtag = ""; //Inicialmente IDtag deve estar vazia.
   // Pega o ID da Tag através da função LeitorRFID.uid e Armazena o ID na variável IDtag
-  while ( leitorEmUso == -1) {
-    if      ( LeitorRFID[0].PICC_ReadCardSerial() ) leitorEmUso = 0;
-    else if ( LeitorRFID[1].PICC_ReadCardSerial() ) leitorEmUso = 1;
-  }
   
-  for (byte i = 0; i < LeitorRFID[leitorEmUso].uid.size; i++) {
-    IDtag.concat(String(LeitorRFID[leitorEmUso].uid.uidByte[i], HEX));
+  for (byte i = 0; i < RFID.uid.size; i++) {
+    IDtag.concat(String(RFID.uid.uidByte[i], HEX));
   }
   IDtag.toUpperCase();
-  BTSerial.print("ID: "); BTSerial.println(IDtag);
+  BTSerial.print(F("ID: ")); BTSerial.println(IDtag);
   //Compara o valor do ID lido com os IDs armazenados no vetor TagsCadastradas[]
   for (int i = 0; i < (sizeof(TagsCadastradas) / sizeof(String)); i++) {
     if (  IDtag.equalsIgnoreCase(TagsCadastradas[i])  ) {

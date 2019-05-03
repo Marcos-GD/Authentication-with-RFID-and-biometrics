@@ -31,52 +31,52 @@ void initFingerPrint()
 {
     finger.begin(57600); // data rate do sensor biométrico
     // teste de comunicação do sensor biometrico
-    if (finger.verifyPassword())  BTSerial.println("Sensor biometrico encontrado!");
-    else                          BTSerial.println("Sem conexao com o sensor biometrico!\nVerifique a conexao e reinicie para utiliza-lo!");
+    if (finger.verifyPassword())  BTSerial.println(F("Sensor biometrico encontrado!"));
+    else                          BTSerial.println(F("Sem conexao com o sensor biometrico!\nVerifique a conexao e reinicie para utiliza-lo!"));
 }
 
-void getFingerprintIDez() {
+bool getFingerprintIDez() {
   uint8_t p = finger.image2Tz();
-  if (p != FINGERPRINT_OK)  return;
+  if (p != FINGERPRINT_OK)  return false;
 
   p = finger.fingerFastSearch();
   if (p == FINGERPRINT_NOTFOUND){
-    BTSerial.println("Digital não reconhecida!");
-    return;
+    BTSerial.println(F("Digital não reconhecida!"));
+    return false;
   }
   else if( p == FINGERPRINT_PACKETRECIEVEERR ) {
-    BTSerial.println("Communication error");
-    return;
+    BTSerial.println(F("Communication error"));
+    return false;
   }
   else {
   // found a match!
-  BTSerial.print("Encontrado ID #"); BTSerial.print(finger.fingerID); 
-  BTSerial.print(" com confiança de "); BTSerial.println(finger.confidence);
-  return; 
+  BTSerial.print(F("Encontrado ID #")); BTSerial.print(finger.fingerID); 
+  BTSerial.print(F(" com confiança de ")); BTSerial.println(finger.confidence);
+  return true; 
   }
 }
 
 uint8_t getFingerprintEnroll() {
 
   int p = -1;
-  BTSerial.print("Aguardando digital para armazenamento como #"); BTSerial.println(id);
+  BTSerial.print(F("Aguardando digital para armazenamento como #")); BTSerial.println(id);
   while (p != FINGERPRINT_OK) {
     p = finger.getImage();
     switch (p) {
     case FINGERPRINT_OK:
-      BTSerial.println("Imagem tirada");
+      BTSerial.println(F("Imagem tirada"));
       break;
     case FINGERPRINT_NOFINGER:
-      BTSerial.println(".");
+      BTSerial.println(F("."));
       break;
     case FINGERPRINT_PACKETRECIEVEERR:
-      BTSerial.println("Communication error");
+      BTSerial.println(F("Communication error"));
       break;
     case FINGERPRINT_IMAGEFAIL:
-      BTSerial.println("Imaging error");
+      BTSerial.println(F("Imaging error"));
       break;
     default:
-      BTSerial.println("Unknown error");
+      BTSerial.println(F("Unknown error"));
       break;
     }
   }
@@ -86,51 +86,51 @@ uint8_t getFingerprintEnroll() {
   p = finger.image2Tz(1);
   switch (p) {
     case FINGERPRINT_OK:
-      BTSerial.println("Imagem convertida");
+      BTSerial.println(F("Imagem convertida"));
       break;
     case FINGERPRINT_IMAGEMESS:
-      BTSerial.println("Image too messy");
+      BTSerial.println(F("Image too messy"));
       return p;
     case FINGERPRINT_PACKETRECIEVEERR:
-      BTSerial.println("Communication error");
+      BTSerial.println(F("Communication error"));
       return p;
     case FINGERPRINT_FEATUREFAIL:
-      BTSerial.println("Could not find fingerprint features");
+      BTSerial.println(F("Could not find fingerprint features"));
       return p;
     case FINGERPRINT_INVALIDIMAGE:
-      BTSerial.println("Could not find fingerprint features");
+      BTSerial.println(F("Could not find fingerprint features"));
       return p;
     default:
-      BTSerial.println("Unknown error");
+      BTSerial.println(F("Unknown error"));
       return p;
   }
   
-  BTSerial.println("Remova o dedo");
+  BTSerial.println(F("Remova o dedo"));
   delay(2000);
   p = 0;
   while (p != FINGERPRINT_NOFINGER) {
     p = finger.getImage();
   }
-  BTSerial.print("ID "); Serial.println(id);
+  BTSerial.print(F("ID ")); Serial.println(id);
   p = -1;
-  BTSerial.println("Recoloque a mesma digital");
+  BTSerial.println(F("Recoloque a mesma digital"));
   while (p != FINGERPRINT_OK) {
     p = finger.getImage();
     switch (p) {
     case FINGERPRINT_OK:
-      BTSerial.println("Imagem tirada");
+      BTSerial.println(F("Imagem tirada"));
       break;
     case FINGERPRINT_NOFINGER:
-      BTSerial.print(".");
+      BTSerial.print(F("."));
       break;
     case FINGERPRINT_PACKETRECIEVEERR:
-      BTSerial.println("Communication error");
+      BTSerial.println(F("Communication error"));
       break;
     case FINGERPRINT_IMAGEFAIL:
-      BTSerial.println("Imaging error");
+      BTSerial.println(F("Imaging error"));
       break;
     default:
-      BTSerial.println("Unknown error");
+      BTSerial.println(F("Unknown error"));
       break;
     }
   }
@@ -140,69 +140,69 @@ uint8_t getFingerprintEnroll() {
   p = finger.image2Tz(2);
   switch (p) {
     case FINGERPRINT_OK:
-      BTSerial.println("Imagem convertida");
+      BTSerial.println(F("Imagem convertida"));
       break;
     case FINGERPRINT_IMAGEMESS:
-      BTSerial.println("Image too messy");
+      BTSerial.println(F("Image too messy"));
       return p;
     case FINGERPRINT_PACKETRECIEVEERR:
-      BTSerial.println("Communication error");
+      BTSerial.println(F("Communication error"));
       return p;
     case FINGERPRINT_FEATUREFAIL:
-      BTSerial.println("Could not find fingerprint features");
+      BTSerial.println(F("Could not find fingerprint features"));
       return p;
     case FINGERPRINT_INVALIDIMAGE:
-      BTSerial.println("Could not find fingerprint features");
+      BTSerial.println(F("Could not find fingerprint features"));
       return p;
     default:
-      BTSerial.println("ERROR!");
+      BTSerial.println(F("ERROR!"));
       return p;
   }
   
   // OK converted!
-  BTSerial.print("Criando modelo para #");  Serial.println(id);
+  BTSerial.print(F("Criando modelo para #"));  Serial.println(id);
   
   p = finger.createModel();
   if (p == FINGERPRINT_OK) {
-    BTSerial.println("Digitais coincidem!");
+    BTSerial.println(F("Digitais coincidem!"));
   } else if (p == FINGERPRINT_ENROLLMISMATCH) {
-    BTSerial.println("Digitais não coincidem");
+    BTSerial.println(F("Digitais não coincidem"));
     return p;
   }   
   
-  BTSerial.print("ID "); Serial.println(id);
+  BTSerial.print(F("ID ")); Serial.println(id);
   p = finger.storeModel(id);
   if (p == FINGERPRINT_OK) {
-    BTSerial.println("Armazenado!");
+    BTSerial.println(F("Armazenado!"));
     return 1;
   } else {
-    BTSerial.println("ERROR!");
+    BTSerial.println(F("ERROR!"));
     return p;
   }
 }
 
 void fingerprintEnroll(){
-  BTSerial.println("Por favor entre com um ID # (de 1 a 127) no qual voce quer salvar a digital...");
+  BTSerial.println(F("Por favor entre com um ID # (de 1 a 127) no qual voce quer salvar a digital..."));
   id = readnumber();
   if ( (id == 0) || (id > 127) ) {// ID #0 not allowed, try again!
-     BTSerial.println("ID não permitido!");
+     BTSerial.println(F("ID não permitido!"));
      return;
   }
-  BTSerial.print("Armazenando ID #");
+  BTSerial.print(F("Armazenando ID #"));
   BTSerial.println(id);
   
   while (!  getFingerprintEnroll() );
 }
 
 void deleteFingerprint(){
-    BTSerial.println("Entre com o id da digital a ser deletada:");
+    BTSerial.println(F("Entre com o id da digital a ser deletada:"));
     int p = finger.deleteModel(id);   
     if ( p == FINGERPRINT_OK ) {
-        BTSerial.println("ID #");
+        BTSerial.println(F("ID #"));
         BTSerial.println(id);
-        BTSerial.println(" deletado com sucesso!");
+        BTSerial.println(F(" deletado com sucesso!"));
         return;
     }
-    else BTSerial.println("Error!");
+    else BTSerial.println(F("Error!"));
     return;
 }
