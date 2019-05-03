@@ -1,0 +1,12 @@
+Output: Gerber Files
+Type  : Gerber
+From  : Variant [[No Variations]] of Project [Portaria.PrjPcb]
+   Generated File[ProtoPCB.RUL]
+   Generated File[ProtoPCB.EXTREP]
+   Generated File[ProtoPCB.REP]
+
+
+Files Generated   : 3
+Documents Printed : 0
+
+Finished Output Generation At 19:49:04 On 29/04/2019

@@ -1,0 +1,18 @@
+Project Outputs Generation Report
+---------------------------------
+Start Output Generation At 22:46:31 On 30/04/2019
+
+Output: Gerber
+Type  : Gerber
+From  : Variant [[No Variations]] of PCB Document [ProtoPCB.CMPcbDoc]
+   Generated File[ProtoPCB.GD1]
+   Generated File[ProtoPCB.GG1]
+   Generated File[ProtoPCB.RUL]
+   Generated File[ProtoPCB.EXTREP]
+   Generated File[ProtoPCB.REP]
+
+
+Files Generated   : 5
+Documents Printed : 0
+
+Finished Output Generation At 22:46:32 On 30/04/2019
