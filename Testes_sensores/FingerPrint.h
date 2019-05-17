@@ -36,7 +36,7 @@ void initFingerPrint()
         Serial.println("Sensor biometrico encontrado!");
     } else {
         Serial.println("Sem conexao com o sensor biometrico!\nVerifique a conexao e reinicie.");
-      //  while (1) { delay(1); }
+      //  while (1) { delay(1); }  
   }
 }
 
