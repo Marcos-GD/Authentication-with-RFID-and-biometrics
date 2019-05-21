@@ -1,5 +1,5 @@
 #include <SoftwareSerial.h>
-SoftwareSerial BTSerial(4,5); // Serial Bluetooth
+SoftwareSerial BTSerial(5,4); // Serial Bluetooth [Senha: 5555]
 SoftwareSerial FP_Serial(2, 3); // Serial Leitor Biometrico
 
 #include "FingerPrint.h"
