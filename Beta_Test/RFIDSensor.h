@@ -12,7 +12,7 @@
  * SPI SCK     SCK          13 / ICSP-3   52        D13        ICSP-3           15          18
  *==========================================================================================
  * Conexões usadas durante estes testes (ARDUINO UNO):
- * SDA    10
+ * SDA    10 (&& 08)
  * RST    09
  * SCK    13
  * MOSI   11

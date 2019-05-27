@@ -33,7 +33,7 @@ void setup()
   while (!Serial);  // For Yun/Leo/Micro/Zero/...
   delay(100);
   Serial.println("\n\nTeste Sensores - Geral");
-
+  pinMode(6, OUTPUT);
   // Testa comunicação com FingerPrint
   initFingerPrint();
 
@@ -45,7 +45,7 @@ void setup()
 
 void loop()
 { 
-  Serial.println(F("Comandos:\n1 - Armazenar nova digital\n2 - Reconhecimento de digital\n3 - Numero de templates armazenados\n4 - Deletar uma ID\n5 - Ler RFID"));
+  Serial.println(F("\n\n\nComandos:\n1 - Armazenar nova digital\n2 - Reconhecimento de digital\n3 - Numero de templates armazenados\n4 - Deletar uma ID\n5 - Ler RFID"));
   Serial.println(F("Aguardando comando: "));
   
   comando = lerComando();
@@ -72,7 +72,12 @@ void loop()
     
     case RECONHECER_RFID:
       LerRFID();
-      CompararRFID();
+      if(CompararRFID())
+      {
+        digitalWrite(6, HIGH);
+        delay(1000);
+        digitalWrite(6,LOW);
+      }
       break;
     
     default:

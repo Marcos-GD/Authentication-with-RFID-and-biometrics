@@ -1,5 +1,5 @@
 #include <SoftwareSerial.h>
-SoftwareSerial BTSerial(4,5); // Serial Bluetooth
+SoftwareSerial BTSerial(5,4); // Serial Bluetooth [Senha: 5555]
 SoftwareSerial FP_Serial(2, 3); // Serial Leitor Biometrico
 
 #include "FingerPrint.h"
@@ -11,8 +11,8 @@ SoftwareSerial FP_Serial(2, 3); // Serial Leitor Biometrico
 #define RST_PIN 10
 #include "RFIDSensor.h"
 
-#define DOORPIN   7
-#define RELAYPIN  6
+#define DOORPIN   6
+#define RELAYPIN  7
 
 bool Relay  = false;
 bool Door   = false; 
@@ -45,6 +45,7 @@ void setup()
   Serial.begin(9600);
   BTSerial.begin(9600);
   SPI.begin();
+  Serial.println(F("\n\nTeste Beta"));
   BTSerial.println(F("\n\nTeste Beta"));
 
   // Testa comunicação com FingerPrint
@@ -119,18 +120,8 @@ void loop()
 
 uint8_t test_new_entity(){
   test_FP = finger.getImage();
-  if (  !BTSerial.available() && 
-        test_FP == FINGERPRINT_NOFINGER && 
-        ( !RFID_Porta.PICC_IsNewCardPresent() || !RFID_Porta.PICC_ReadCardSerial() ))
-    return NADA_ENCONTRADO;
-  
-  else if ( test_FP == FINGERPRINT_PACKETRECIEVEERR )
-  {
-    BTSerial.println(F("Erro de comunicação com o FingerPrinter!"));
-    return NADA_ENCONTRADO;
-  }
-  
-  else if ( BTSerial.available() )
+
+  if ( BTSerial.available() )
   {
     BTSerial.println(F("\nComandos:\n1 - Armazenar nova digital\n2 - Numero de templates armazenados\n3 - Deletar uma ID\n4 - Ligar energia\n5 - Desligar energia\n6 - Abrir Porta"));
     uint8_t comm = 0;
@@ -139,7 +130,15 @@ uint8_t test_new_entity(){
     return comm;
   }
   
+  else if (RFID_Porta.PICC_IsNewCardPresent() && RFID_Porta.PICC_ReadCardSerial()) return RECONHECER_RFID;
+
   else if ( test_FP == FINGERPRINT_OK ) return RECONHECER_FP;
 
-  else return RECONHECER_RFID;
+  else if ( test_FP == FINGERPRINT_PACKETRECIEVEERR )
+  {
+    BTSerial.println(F("Erro de comunicação com o FingerPrinter!"));
+    return NADA_ENCONTRADO;
+  }
+
+  else return NADA_ENCONTRADO;
 }

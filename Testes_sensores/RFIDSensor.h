@@ -58,12 +58,12 @@ MFRC522 LeitorRFID[2];
 
 String LerRFID() {
   IDtag = ""; //Inicialmente IDtag deve estar vazia.
-  Serial.println("Aproxime a TAG");
+  Serial.println("Aproxime a TAG\n\n\n");
   leitorEmUso = -1;
   
   // Verifica se existe uma Tag presente
   while ( leitorEmUso == -1) {
-    Serial.println(".");
+   // Serial.println(".");
     delay(100);
     
     if      ( LeitorRFID[0].PICC_IsNewCardPresent() && LeitorRFID[0].PICC_ReadCardSerial() ) leitorEmUso = 0;
@@ -80,18 +80,19 @@ String LerRFID() {
   return IDtag;
 }
 
-void CompararRFID(){
+bool CompararRFID(){
   //Compara o valor do ID lido com os IDs armazenados no vetor TagsCadastradas[]
   for (int i = 0; i < (sizeof(TagsCadastradas) / sizeof(String)); i++) {
     if (  IDtag.equalsIgnoreCase(TagsCadastradas[i])  ) {
       Serial.println("ID cadastrada");
       Serial.print("LeitorRFID "); Serial.println( leitorEmUso + 1 );
       delay(2000);
-      return;
+      return true;
     }
   }
   if ( IDtag == "" ) Serial.println("Cancelando reconhecimento!");
   else Serial.println("ID desconhecida!");
   delay(2000); //aguarda 2 segundos para efetuar uma nova leitura
+  return false;
 }
 
